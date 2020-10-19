@@ -1,0 +1,56 @@
+{% extends 'user/base.html'  %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container-fluid">
+	<h1 class="heading">{{pageName}}</h1>
+</div>
+	<div class="container model-view">
+				<div class="d-flex">
+			<a class="btn btn-md btn-dark mr-auto add-new my-2" href="{% url 'schedule' %}"><i class="fas fa-chevron-left mr-1"></i> Back</a>
+		</div>
+
+		<table class="table details">
+		      	<tr>
+			        <td>Lecture no</td>
+			        <td>{{schedule.lecture_no}}</td>
+		      	</tr>
+	    	  	<tr>
+	    	  		<td>Subject</td>
+			        <td>{{schedule.subject}}</td>
+			    </tr>
+		      	<tr>
+		      		<td>Course</td>
+			        <td>
+			        	{%for course in schedule.course.all %}
+				        	{{course}}{{ forloop.last|yesno:",&#44;"|safe }}
+				        {% endfor %}
+				    </td> 
+		      	</tr>
+		      	<tr>
+		      		<td>Semester</td>
+			        <td>{{schedule.sem}}</td>
+		      	</tr>
+		      	<tr>
+		      		<td>Days</td>
+			    	<td>
+						{{schedule.day}}
+				    </td>
+		      	</tr>
+	      	 	{% if user.is_staff %}
+				    <tr>
+		      			<td>Teacher</td>
+		      			{% if user.is_staff %}
+				        	<td>{{schedule.teacher}}</td>
+			        	{% endif %}
+			        </tr>
+		      	{% endif %}
+	      	</table>
+	      	<a class="btn btn-md btn-success add-new m-2" type="button" href="{% url 'submit-attendance' schedule.pk %}">Submit Attendance</a>
+  		  	{% if user.is_staff %}
+			  	<a class="btn btn-md btn-primary add-new m-2" type="button" href="{% url 'schedule-update' schedule.pk %}">Update Schedule</a>
+			  	<a class="btn btn-md btn-danger add-new m-2" type="button" href="{% url 'schedule-delete' schedule.pk %}">Delete Schedule</a>
+			  	
+			{% endif %}
+
+	</div>
+{% endblock %}
